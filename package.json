@@ -2,6 +2,7 @@
   "name": "admin-service",
   "version": "0.0.1",
   "description": "",
+  "packageManager": "pnpm@10.24.0",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -21,10 +22,20 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "cookie-parser": "^1.4.6",
+    "exceljs": "^4.3.0",
+    "jsonwebtoken": "^9.0.0",
+    "pdfkit": "^0.14.0",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -35,6 +46,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
+    "@types/pdfkit": "^0.17.3",
     "@types/supertest": "^6.0.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
@@ -50,6 +62,9 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
+  },
+  "optionalDependencies": {
+    "morgan": "^1.10.0"
   },
   "jest": {
     "moduleFileExtensions": [
