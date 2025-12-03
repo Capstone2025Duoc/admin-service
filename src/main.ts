@@ -21,7 +21,7 @@ async function bootstrap() {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  app.enableCors({ origin: allowedOrigins, credentials: true });
+  app.enableCors({ origin: allowedOrigins, credentials: true, allowedHeaders: ['Authorization', 'Content-Type', 'Accept'] });
 
   app.use(cookieParser());
 
