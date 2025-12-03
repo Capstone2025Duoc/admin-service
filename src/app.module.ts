@@ -20,11 +20,13 @@ import * as path from 'path';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        host: config.get('DB_HOST', 'localhost'),
-        port: parseInt(config.get('DB_PORT', '5432')),
-        username: config.get('DB_USER'),
-        password: config.get('DB_PASS'),
-        database: config.get('DB_NAME'),
+        // If a DATABASE_URL is provided, prefer it (works well with Docker and managed DBs)
+        url: config.get('DATABASE_URL') ?? undefined,
+        host: config.get('DATABASE_URL') ? undefined : config.get('DB_HOST', 'localhost'),
+        port: config.get('DATABASE_URL') ? undefined : parseInt(config.get('DB_PORT', '5432')),
+        username: config.get('DATABASE_URL') ? undefined : config.get('DB_USER'),
+        password: config.get('DATABASE_URL') ? undefined : config.get('DB_PASS'),
+        database: config.get('DATABASE_URL') ? undefined : config.get('DB_NAME'),
         synchronize: false,
         logging: false,
         entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')],

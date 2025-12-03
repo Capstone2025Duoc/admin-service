@@ -7,9 +7,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install dependencies based on lockfile
 COPY package.json pnpm-lock.yaml ./
-# Use --no-frozen-lockfile temporarily to avoid build failures when lockfile
-# is not yet committed. Replace with --frozen-lockfile after syncing lockfile.
-RUN pnpm install --no-frozen-lockfile
+# Use frozen lockfile to ensure reproducible installs
+RUN pnpm install --frozen-lockfile
 
 # Copy source and build
 COPY . ./

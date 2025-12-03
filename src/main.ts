@@ -10,48 +10,22 @@ try {
   morgan = null;
 }
 
-const parseOrigins = (value?: string) =>
-  (value ?? '')
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const defaultFrontend = 'https://0r5lvz74-3004.brs.devtunnels.ms';
-  const envOrigins = parseOrigins(process.env.FRONTEND_URLS);
-  const allowedOrigins = [
-    ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-    ...envOrigins,
-    defaultFrontend,
-    'http://localhost:3004',
-    'http://127.0.0.1:3004',
-  ];
-  const originWhitelist = [...new Set(allowedOrigins.filter(Boolean))];
+  // enable CORS for local frontend on port 3004 (allow cookies)
+  // Allow specific origins instead of wildcard when credentials are used.
+  // Use `ALLOWED_ORIGINS` env var as comma-separated list, defaulting to http://localhost:3004
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:3004')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-  app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (originWhitelist.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error('CORS policy: Origin not allowed'), false);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'Cookie',
-      'Set-Cookie',
-      'X-Requested-With',
-    ],
-    exposedHeaders: ['Set-Cookie'],
-  });
+  app.enableCors({ origin: allowedOrigins, credentials: true });
 
   app.use(cookieParser());
 
+  // use morgan in development if available
   const env = process.env.NODE_ENV || 'development';
   if (env !== 'production' && morgan) {
     app.use(morgan('dev'));
